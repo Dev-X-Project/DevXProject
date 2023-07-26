@@ -1,13 +1,43 @@
 import express from "express";
 import cors from "cors";
+import mongoose from "mongoose";
+import * as dotenv from "dotenv";
+import postRouter from "./routes/post.js";
+dotenv.config(); 
+
+const port = process.env.PORT;
+const mongoDbURI = process.env.MONGO_URI;
+
 const app = express();
 
-app.use(cors())
+
+mongoose.connect(mongoDbURI).then(() => {
+	console.log("Database connected successfully");
+}).catch((e) => {
+	console.log(e);
+});
+
+
+
+app.use(cors());
+
+app.use(express.json())
+
+
+
+app.use("/posts", postRouter);
+
+
 
 app.get("/", (req, res) => {
-    res.send("Welcome to devX server")
+	res.send("Welcome to devX server");
 });
 
-app.listen(5000, () => {
-    console.log("Server is running");
+app.listen(port, () => {
+	console.log("Server is running");
 });
+
+
+
+
+
